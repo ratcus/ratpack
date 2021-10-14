@@ -20,7 +20,7 @@ jobs:
           COMMIT_TAG: ${{ steps.commit_tag.outputs.TAG }}
         with:
           type: zip
-          filename: ratpack-full-${COMMIT_TAG}.zip
+          filename: ratpack-full-${{ env.COMMIT_TAG }}.zip
           exclusions: '*.git*'
       - name: Non-GUI ZIP
         uses: thedoctor0/zip-release@master
@@ -28,7 +28,7 @@ jobs:
           COMMIT_TAG: ${{ steps.commit_tag.outputs.TAG }}
         with:
           type: zip
-          filename: ratpack-nogui-${COMMIT_TAG}.zip
+          filename: ratpack-nogui-${{ env.COMMIT_TAG }}.zip
           exclusions: '*.git* ./assets/minecraft/textures/gui splashes.txt '
       - name: Release
         uses: ncipollo/release-action@v1
@@ -36,5 +36,5 @@ jobs:
           COMMIT_TAG: ${{ steps.commit_tag.outputs.TAG }}
         with:
           draft: true
-          artifacts: ratpack-nogui-${COMMIT_TAG}.zip, ratpack-full-${COMMIT_TAG}.zip
+          artifacts: ratpack-nogui-${{ env.COMMIT_TAG }}.zip, ratpack-full-${{ env.COMMIT_TAG }}.zip
           token: ${{ secrets.GITHUB_TOKEN }}
