@@ -1,0 +1,27 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Full ZIP
+        uses: thedoctor0/zip-release@master
+        with:
+          type: zip
+          filename: ratpack-full-${{ startsWith(github.ref, 'refs/tags/v') }}.zip
+          exclusions: '*.git*'
+      - name: Non-GUI ZIP
+        uses: thedoctor0/zip-release@master
+        with:
+          type: zip
+          filename: ratpack-nogui-${{ startsWith(github.ref, 'refs/tags/v') }}.zip
+          exclusions: '*.git* ./assets/minecraft/textures/gui splashes.txt '
+      - name: Release
+        uses: softprops/action-gh-release@v1
