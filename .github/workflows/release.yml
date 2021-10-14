@@ -11,17 +11,30 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Commit tag
+        id: commit_tag
+        run: echo ::set-output name=TAG::${GITHUB_REF#refs/tags/}
       - name: Full ZIP
         uses: thedoctor0/zip-release@master
+        env:
+          COMMIT_TAG: ${{ steps.commit_tag.outputs.TAG }}
         with:
           type: zip
-          filename: ratpack-full-${{ startsWith(github.ref, 'refs/tags/v') }}.zip
+          filename: ratpack-full-${COMMIT_TAG}.zip
           exclusions: '*.git*'
       - name: Non-GUI ZIP
         uses: thedoctor0/zip-release@master
+        env:
+          COMMIT_TAG: ${{ steps.commit_tag.outputs.TAG }}
         with:
           type: zip
-          filename: ratpack-nogui-${{ startsWith(github.ref, 'refs/tags/v') }}.zip
+          filename: ratpack-nogui-${COMMIT_TAG}.zip
           exclusions: '*.git* ./assets/minecraft/textures/gui splashes.txt '
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
+        env:
+          COMMIT_TAG: ${{ steps.commit_tag.outputs.TAG }}
+        with:
+          draft: true
+          artifacts: ratpack-nogui-${COMMIT_TAG}.zip, ratpack-full-${COMMIT_TAG}.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
