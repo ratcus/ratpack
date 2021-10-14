@@ -1,6 +1,15 @@
 {
     "providers": [
         {
+            "type": "bitmap",
+            "file": "minecraft:custom/tab-logo.png",
+            "ascent": 14,
+            "height": 22,
+            "chars": [
+                "\u2299"
+            ]
+        },
+        {
             "type": "ttf",
             "file": "minecraft:negative_spaces.ttf",
             "shift": [
